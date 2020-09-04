@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DotNetCore.CAP.Internal;
 using DotNetCore.CAP.Messages;
@@ -15,10 +16,11 @@ namespace DotNetCore.CAP.MySql.Test
 
         public MySqlStorageConnectionTest()
         {
+            var serviceProvider = GetService<IServiceProvider>();
             var options = GetService<IOptions<MySqlOptions>>();
             var capOptions = GetService<IOptions<CapOptions>>();
             var initializer = GetService<IStorageInitializer>();
-            _storage = new MySqlDataStorage(options, capOptions, initializer);
+            _storage = new MySqlDataStorage(options, capOptions, initializer, serviceProvider);
         }
 
         [Fact]

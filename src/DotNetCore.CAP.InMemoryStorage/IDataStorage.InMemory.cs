@@ -12,16 +12,23 @@ using DotNetCore.CAP.Messages;
 using DotNetCore.CAP.Monitoring;
 using DotNetCore.CAP.Persistence;
 using DotNetCore.CAP.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace DotNetCore.CAP.InMemoryStorage
 {
     internal class InMemoryStorage : IDataStorage
     {
-        private readonly IOptions<CapOptions> _capOptions;
+        private readonly IServiceProvider _serviceProvider;
 
-        public InMemoryStorage(IOptions<CapOptions> capOptions)
+        private readonly IOptions<CapOptions> _capOptions;
+        private readonly ISerializer _serializer;
+
+        public InMemoryStorage(IOptions<CapOptions> capOptions, IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
+            _serializer = serviceProvider.GetService<ISerializer>();
+
             _capOptions = capOptions;
         }
 
@@ -49,7 +56,7 @@ namespace DotNetCore.CAP.InMemoryStorage
             {
                 DbId = content.GetId(),
                 Origin = content,
-                Content = StringSerializer.Serialize(content),
+                Content = _serializer.Serialize(content),
                 Added = DateTime.Now,
                 ExpiresAt = null,
                 Retries = 0
@@ -104,7 +111,7 @@ namespace DotNetCore.CAP.InMemoryStorage
                 Origin = mdMessage.Origin,
                 Group = group,
                 Name = name,
-                Content = StringSerializer.Serialize(mdMessage.Origin),
+                Content = _serializer.Serialize(mdMessage.Origin),
                 Retries = mdMessage.Retries,
                 Added = mdMessage.Added,
                 ExpiresAt = mdMessage.ExpiresAt,
@@ -152,7 +159,7 @@ namespace DotNetCore.CAP.InMemoryStorage
 
             foreach (var message in ret)
             {
-                message.Origin = StringSerializer.DeSerialize(message.Content);
+                message.Origin = _serializer.Deserialize(message.Content);
             }
 
             return Task.FromResult(ret);
@@ -169,7 +176,7 @@ namespace DotNetCore.CAP.InMemoryStorage
 
             foreach (var message in ret)
             {
-                message.Origin = StringSerializer.DeSerialize(message.Content);
+                message.Origin = _serializer.Deserialize(message.Content);
             }
 
             return Task.FromResult(ret);

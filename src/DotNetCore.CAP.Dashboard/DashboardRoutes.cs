@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNetCore.CAP.Dashboard
 {
-    public static class DashboardRoutes
+    public class DashboardRoutes
     {
         private static readonly string[] Javascripts =
         {
@@ -33,7 +33,7 @@ namespace DotNetCore.CAP.Dashboard
             "cap.css"
         };
 
-        static DashboardRoutes()
+        public DashboardRoutes(ISerializer serializer)
         {
             Routes = new RouteCollection();
             Routes.AddRazorPage("/", x => new HomePage());
@@ -104,7 +104,7 @@ namespace DotNetCore.CAP.Dashboard
                 {
                     var msg = client.Storage.GetMonitoringApi().GetPublishedMessageAsync(messageId)
                         .GetAwaiter().GetResult();
-                    msg.Origin = StringSerializer.DeSerialize(msg.Content);
+                    msg.Origin = serializer.Deserialize(msg.Content);
                     client.RequestServices.GetService<IDispatcher>().EnqueueToPublish(msg);
                 });
             Routes.AddPublishBatchCommand(
@@ -113,7 +113,7 @@ namespace DotNetCore.CAP.Dashboard
                 {
                     var msg = client.Storage.GetMonitoringApi().GetReceivedMessageAsync(messageId)
                         .GetAwaiter().GetResult();
-                    msg.Origin = StringSerializer.DeSerialize(msg.Content);
+                    msg.Origin = serializer.Deserialize(msg.Content);
                     client.RequestServices.GetService<ISubscribeDispatcher>().DispatchAsync(msg);
                 }); 
 
@@ -137,7 +137,7 @@ namespace DotNetCore.CAP.Dashboard
             #endregion Razor pages and commands
         }
 
-        public static RouteCollection Routes { get; }
+        public RouteCollection Routes { get; }
 
         internal static string GetContentFolderNamespace(string contentFolder)
         {

@@ -25,7 +25,7 @@ namespace DotNetCore.CAP.Serialization
 
             var json = JsonConvert.SerializeObject(message.Value);
             return Task.FromResult(new TransportMessage(message.Headers, Encoding.UTF8.GetBytes(json)));
-        }
+        }       
 
         public Task<Message> DeserializeAsync(TransportMessage transportMessage, Type valueType)
         {
@@ -36,6 +36,18 @@ namespace DotNetCore.CAP.Serialization
 
             var json = Encoding.UTF8.GetString(transportMessage.Body);
             return Task.FromResult(new Message(transportMessage.Headers, JsonConvert.DeserializeObject(json, valueType)));
+        }
+
+        public Type ValueType { get; }
+
+        public string Serialize(Message message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Message Deserialize(string json)
+        {
+            throw new NotImplementedException();
         }
     }
 }
