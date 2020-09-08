@@ -1,4 +1,5 @@
-﻿// Copyright (c) .NET Core Community. All rights reserved.
+﻿using System.Reflection;
+// Copyright (c) .NET Core Community. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using System;
@@ -8,10 +9,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DotNetCore.CAP.Messages;
+using DotNetCore.CAP.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Dynamic;
 
 namespace DotNetCore.CAP.Internal
 {
@@ -61,6 +65,10 @@ namespace DotNetCore.CAP.Internal
                         {
                             executeParameters[i] = jToken.ToObject(parameterDescriptors[i].ParameterType);
                         }
+                        // else if(message.Value is Object)
+                        // {
+                        //     //how to deserialize back to the right Type
+                        // }
                         else
                         {
                             var converter = TypeDescriptor.GetConverter(parameterDescriptors[i].ParameterType);

@@ -9,16 +9,21 @@ namespace DotNetCore.CAP.Messages
 {
     public class Message
     {
+        /// <summary>
+        /// Added parameterless constructor for System.Text.Json
+        /// </summary>
+        public Message() {}
+
         public Message(IDictionary<string, string> headers, [CanBeNull] object value)
         {
             Headers = headers ?? throw new ArgumentNullException(nameof(headers));
             Value = value;
         }
 
-        public IDictionary<string, string> Headers { get; }
+        public IDictionary<string, string> Headers { get; set; }
 
         [CanBeNull]
-        public object Value { get; }
+        public object Value { get; set;}
     }
 
     public static class MessageExtensions
