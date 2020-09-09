@@ -19,8 +19,8 @@ namespace DotNetCore.CAP.Serialization
         /// Deserialize the given <see cref="TransportMessage"/> back into a <see cref="Message"/>
         /// </summary>
         Task<Message> DeserializeAsync(TransportMessage transportMessage, [CanBeNull] Type valueType);
-
-        /// <summary>
+		
+		/// <summary>
         /// Serializes the given <see cref="Message"/> into a string
         /// </summary>
         string Serialize(Message message);
