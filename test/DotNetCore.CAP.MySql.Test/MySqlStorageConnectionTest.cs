@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using DotNetCore.CAP.Internal;
 using DotNetCore.CAP.Messages;
 using DotNetCore.CAP.Persistence;
+using DotNetCore.CAP.Serialization;
 using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace DotNetCore.CAP.MySql.Test
 {
-    [Collection("MySql")]
+  [Collection("MySql")]
     public class MySqlStorageConnectionTest : DatabaseTestHost
     {
         private readonly MySqlDataStorage _storage;
 
         public MySqlStorageConnectionTest()
         {
-            var serviceProvider = GetService<IServiceProvider>();
+            var serializer = GetService<ISerializer>();
             var options = GetService<IOptions<MySqlOptions>>();
             var capOptions = GetService<IOptions<CapOptions>>();
             var initializer = GetService<IStorageInitializer>();
-            _storage = new MySqlDataStorage(options, capOptions, initializer, serviceProvider);
+            _storage = new MySqlDataStorage(options, capOptions, initializer, serializer);
         }
 
         [Fact]

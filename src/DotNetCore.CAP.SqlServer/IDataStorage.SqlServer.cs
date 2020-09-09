@@ -20,8 +20,6 @@ namespace DotNetCore.CAP.SqlServer
 {
     public class SqlServerDataStorage : IDataStorage
     {
-        private readonly IServiceProvider _serviceProvider;
-
         private readonly IOptions<CapOptions> _capOptions;
         private readonly IOptions<SqlServerOptions> _options;
         private readonly IStorageInitializer _initializer;
@@ -33,10 +31,9 @@ namespace DotNetCore.CAP.SqlServer
             IOptions<CapOptions> capOptions,
             IOptions<SqlServerOptions> options,
             IStorageInitializer initializer,
-            IServiceProvider serviceProvider)
+            ISerializer serializer)
         {
-            _serviceProvider = serviceProvider;
-            _serializer = serviceProvider.GetService<ISerializer>();
+            _serializer = serializer;
 
             _options = options;
             _initializer = initializer;

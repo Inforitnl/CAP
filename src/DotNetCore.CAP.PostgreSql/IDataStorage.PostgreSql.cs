@@ -12,7 +12,6 @@ using DotNetCore.CAP.Monitoring;
 using DotNetCore.CAP.Persistence;
 using DotNetCore.CAP.Serialization;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
@@ -20,8 +19,6 @@ namespace DotNetCore.CAP.PostgreSql
 {
     public class PostgreSqlDataStorage : IDataStorage
     {
-        private readonly IServiceProvider _serviceProvider;
-
         private readonly IOptions<CapOptions> _capOptions;
         private readonly IStorageInitializer _initializer;
         private readonly IOptions<PostgreSqlOptions> _options;
@@ -33,10 +30,9 @@ namespace DotNetCore.CAP.PostgreSql
             IOptions<PostgreSqlOptions> options,
             IOptions<CapOptions> capOptions,
             IStorageInitializer initializer,
-            IServiceProvider serviceProvider)
+            ISerializer serializer)
         {
-            _serviceProvider = serviceProvider;
-            _serializer = serviceProvider.GetService<ISerializer>();
+            _serializer = serializer;
 
             _capOptions = capOptions;
             _initializer = initializer;

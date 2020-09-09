@@ -12,7 +12,6 @@ using DotNetCore.CAP.Monitoring;
 using DotNetCore.CAP.Persistence;
 using DotNetCore.CAP.Serialization;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 
@@ -20,8 +19,6 @@ namespace DotNetCore.CAP.MySql
 {
     public class MySqlDataStorage : IDataStorage
     {
-        private readonly IServiceProvider _serviceProvider;
-
         private readonly IOptions<MySqlOptions> _options;
         private readonly IOptions<CapOptions> _capOptions;
         private readonly IStorageInitializer _initializer;
@@ -34,10 +31,9 @@ namespace DotNetCore.CAP.MySql
             IOptions<MySqlOptions> options,
             IOptions<CapOptions> capOptions,
             IStorageInitializer initializer,
-            IServiceProvider serviceProvider)
+            ISerializer serializer)
         {
-            _serviceProvider = serviceProvider;
-            _serializer = serviceProvider.GetService<ISerializer>();
+            _serializer = serializer;
 
             _options = options;
             _capOptions = capOptions;

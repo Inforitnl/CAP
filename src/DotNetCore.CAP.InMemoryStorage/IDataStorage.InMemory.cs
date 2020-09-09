@@ -12,22 +12,18 @@ using DotNetCore.CAP.Messages;
 using DotNetCore.CAP.Monitoring;
 using DotNetCore.CAP.Persistence;
 using DotNetCore.CAP.Serialization;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace DotNetCore.CAP.InMemoryStorage
 {
     internal class InMemoryStorage : IDataStorage
     {
-        private readonly IServiceProvider _serviceProvider;
-
         private readonly IOptions<CapOptions> _capOptions;
         private readonly ISerializer _serializer;
 
-        public InMemoryStorage(IOptions<CapOptions> capOptions, IServiceProvider serviceProvider)
+        public InMemoryStorage(IOptions<CapOptions> capOptions, ISerializer serializer)
         {
-            _serviceProvider = serviceProvider;
-            _serializer = serviceProvider.GetService<ISerializer>();
+            _serializer = serializer;
 
             _capOptions = capOptions;
         }
