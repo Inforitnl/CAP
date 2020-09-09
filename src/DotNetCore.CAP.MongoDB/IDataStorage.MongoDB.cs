@@ -18,8 +18,7 @@ namespace DotNetCore.CAP.MongoDB
 {
     public class MongoDBDataStorage : IDataStorage
     {
-		    private readonly ISerializer _serializer;
-
+	private readonly ISerializer _serializer;
         private readonly IOptions<CapOptions> _capOptions;
         private readonly IMongoClient _client;
         private readonly IMongoDatabase _database;
@@ -28,11 +27,10 @@ namespace DotNetCore.CAP.MongoDB
         public MongoDBDataStorage(
             IOptions<CapOptions> capOptions,
             IOptions<MongoDBOptions> options,
-			      IMongoClient client,
-			      ISerializer serializer)
+	    IMongoClient client,
+            ISerializer serializer)
         {
-			      _serializer = serializer;
-
+	    _serializer = serializer;
             _capOptions = capOptions;
             _options = options;
             _client = client;
@@ -71,7 +69,7 @@ namespace DotNetCore.CAP.MongoDB
             {
                 DbId = content.GetId(),
                 Origin = content,
-				        Content = _serializer.Serialize(content),
+		Content = _serializer.Serialize(content),
                 Added = DateTime.Now,
                 ExpiresAt = null,
                 Retries = 0
@@ -134,7 +132,7 @@ namespace DotNetCore.CAP.MongoDB
                 ExpiresAt = null,
                 Retries = 0
             };
-			      var content = _serializer.Serialize(mdMessage.Origin);
+	    var content = _serializer.Serialize(mdMessage.Origin);
 
             var collection = _database.GetCollection<ReceivedMessage>(_options.Value.ReceivedCollection);
 
@@ -188,7 +186,7 @@ namespace DotNetCore.CAP.MongoDB
             return queryResult.Select(x => new MediumMessage
             {
                 DbId = x.Id.ToString(),
-				        Origin = _serializer.Deserialize(x.Content),
+		Origin = _serializer.Deserialize(x.Content),
                 Retries = x.Retries,
                 Added = x.Added
             }).ToList();
@@ -209,7 +207,7 @@ namespace DotNetCore.CAP.MongoDB
             return queryResult.Select(x => new MediumMessage
             {
                 DbId = x.Id.ToString(),
-				        Origin = _serializer.Deserialize(x.Content),
+		Origin = _serializer.Deserialize(x.Content),
                 Retries = x.Retries,
                 Added = x.Added
             }).ToList();
