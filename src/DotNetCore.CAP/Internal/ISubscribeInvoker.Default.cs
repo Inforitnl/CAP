@@ -23,11 +23,13 @@ namespace DotNetCore.CAP.Internal
     {
         private readonly ILogger _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly ISerializer _serializer;
         private readonly ConcurrentDictionary<int, ObjectMethodExecutor> _executors;
 
-        public SubscribeInvoker(ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public SubscribeInvoker(ILoggerFactory loggerFactory, IServiceProvider serviceProvider, ISerializer serializer)
         {
             _serviceProvider = serviceProvider;
+            _serializer = serializer;
             _logger = loggerFactory.CreateLogger<SubscribeInvoker>();
             _executors = new ConcurrentDictionary<int, ObjectMethodExecutor>();
         }
@@ -60,15 +62,11 @@ namespace DotNetCore.CAP.Internal
                 else
                 {
                     if (message.Value != null)
-                    {
-                        if (message.Value is JToken jToken)  //reading from storage
+                    {                        
+                        if (_serializer.IsJsonType(message.Value))  // use ISerializer when reading from storage, skip other objects if not Json
                         {
-                            executeParameters[i] = jToken.ToObject(parameterDescriptors[i].ParameterType);
+                            executeParameters[i] = _serializer.Deserialize(message.Value, parameterDescriptors[i].ParameterType);
                         }
-                        // else if(message.Value is Object)
-                        // {
-                        //     //how to deserialize back to the right Type
-                        // }
                         else
                         {
                             var converter = TypeDescriptor.GetConverter(parameterDescriptors[i].ParameterType);

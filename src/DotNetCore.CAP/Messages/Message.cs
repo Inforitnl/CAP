@@ -10,7 +10,7 @@ namespace DotNetCore.CAP.Messages
     public class Message
     {
         /// <summary>
-        /// Added parameterless constructor for System.Text.Json
+        /// System.Text.Json requires that class explicitly has a parameterless constructor
         /// </summary>
         public Message() {}
 

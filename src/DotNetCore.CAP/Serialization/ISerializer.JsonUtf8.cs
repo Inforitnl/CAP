@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DotNetCore.CAP.Messages;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DotNetCore.CAP.Serialization
 {
@@ -38,8 +39,6 @@ namespace DotNetCore.CAP.Serialization
             return Task.FromResult(new Message(transportMessage.Headers, JsonConvert.DeserializeObject(json, valueType)));
         }
 
-        public Type ValueType { get; }
-
         public string Serialize(Message message)
         {
             throw new NotImplementedException();
@@ -49,5 +48,15 @@ namespace DotNetCore.CAP.Serialization
         {
             throw new NotImplementedException();
         }
-    }
+
+        public object Deserialize(object value, Type valueType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsJsonType(object jsonObject)
+        {
+            return jsonObject is JToken;
+        }
+  }
 }

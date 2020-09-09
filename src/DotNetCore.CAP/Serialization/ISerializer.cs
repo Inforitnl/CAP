@@ -29,5 +29,25 @@ namespace DotNetCore.CAP.Serialization
         /// Deserialize the given string into a <see cref="Message"/>
         /// </summary>
         Message Deserialize(string json);
+
+        /// <summary>
+        /// Deserialize the given object with the given Type into an object
+        /// </summary>
+        object Deserialize(object value, Type valueType);
+
+        /// <summary>
+        /// Check if the given object is of Json type, e.g. JToken or JsonElement
+        /// depending on the type of serializer implemented
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// // Example implementation for System.Text.Json
+        ///  public bool IsJsonType(object jsonObject)
+        /// {
+        ///    return jsonObject is JsonElement;
+        /// }
+        /// </code>
+        /// </example>
+        bool IsJsonType(object jsonObject);
     }
 }
