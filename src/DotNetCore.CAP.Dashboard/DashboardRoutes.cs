@@ -33,9 +33,9 @@ namespace DotNetCore.CAP.Dashboard
             "cap.css"
         };
 
-        public DashboardRoutes(ISerializer serializer)
+        public static RouteCollection GetDashboardRoutes(ISerializer serializer)
         {
-            Routes = new RouteCollection();
+            RouteCollection Routes = new RouteCollection();
             Routes.AddRazorPage("/", x => new HomePage());
             Routes.Add("/stats", new JsonStats());
             Routes.Add("/health", new OkStats());
@@ -135,9 +135,12 @@ namespace DotNetCore.CAP.Dashboard
             Routes.AddRazorPage("/nodes/node/(?<Id>.+)", x => new NodePage(x.UriMatch.Groups["Id"].Value));
 
             #endregion Razor pages and commands
+
+            return Routes;
         }
 
-        public RouteCollection Routes { get; }
+// private check
+        //public static RouteCollection Routes { get; }
 
         internal static string GetContentFolderNamespace(string contentFolder)
         {

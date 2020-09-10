@@ -51,9 +51,9 @@ namespace DotNetCore.CAP.Serialization
 
     public object Deserialize(object value, Type valueType)
     {
-      if (value is JToken)
+      if (value is JToken jToken)
       {
-        return JsonConvert.DeserializeObject(value.ToString(), valueType);
+        return jToken.ToObject(valueType);
       }
       throw new NotSupportedException("Type is not of type JToken");
     }

@@ -27,7 +27,7 @@ namespace DotNetCore.CAP
             _options?.Invoke(dashboardOptions);
             services.AddTransient<IStartupFilter, CapStartupFilter>();
             services.AddSingleton(dashboardOptions);
-            services.AddSingleton(x => new DashboardRoutes(x.GetRequiredService<ISerializer>()).Routes);
+            services.AddSingleton(x => DashboardRoutes.GetDashboardRoutes(x.GetRequiredService<ISerializer>()));
             services.AddSingleton<IHttpRequester, HttpClientHttpRequester>();
             services.AddSingleton<IHttpClientCache, MemoryHttpClientCache>();
             services.AddSingleton<IRequestMapper, RequestMapper>();
